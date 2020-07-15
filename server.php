@@ -11,10 +11,10 @@ $errors = array();
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
   // receive all input values from the form
-  $nama_lengkap = mysqli_real_escape_string($db, $_POST['nama_lengkap']);
-  $email = mysqli_real_escape_string($db, $_POST['email']);
-  $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
-  $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+  $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $password_1 = mysqli_real_escape_string($conn, $_POST['password_1']);
+  $password_2 = mysqli_real_escape_string($conn, $_POST['password_2']);
 
   // form validation: ensure that the form is correctly filled ...
   // by adding (array_push()) corresponding error unto $errors array
@@ -28,7 +28,7 @@ if (isset($_POST['reg_user'])) {
   // first check the database to make sure 
   // a user does not already exist with the same username and/or email
   $user_check_query = "SELECT * FROM users WHERE nama_lengkap='$nama_lengkap' OR email='$email' LIMIT 1";
-  $result = $db->query($user_check_query);
+  $result = $conn->query($user_check_query);
   $user = $result->fetch_assoc();
   
   if ($user) { // if user exists
@@ -47,7 +47,7 @@ if (isset($_POST['reg_user'])) {
 
   	$query = "INSERT INTO users (nama_lengkap, email, password) 
   			  VALUES('$nama_lengkap', '$email', '$password')";
-  	$db->query($query);
+  	$conn->query($query);
   	$_SESSION['nama_lengkap'] = $nama_lengkap;
     $_SESSION['email'] = $email;
     $_SESSION['level'] = 0;
@@ -57,7 +57,7 @@ if (isset($_POST['reg_user'])) {
       $password = password_hash($password_1, PASSWORD_DEFAULT);//encrypt the password before saving in the database
       $query = "INSERT INTO users (nama_lengkap, email, password) 
             VALUES('$nama_lengkap', '$email', '$password')";
-      $db->query($query);
+      $conn->query($query);
       $_SESSION['nama_lengkap'] = $nama_lengkap;
       $_SESSION['email'] = $email;
       $_SESSION['level'] = 1;
